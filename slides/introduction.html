@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Introduction</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Garamond);
+      @import url(https://fonts.googleapis.com/css?family=Muli:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+![:scale 40%](images/sklearn_logo.png)
+
+
+# Introduction to Machine learning with scikit-learn
+
+Andreas C. Müller
+
+Microsoft, scikit-learn
+
+.smallest[https://github.com/amueller/water_hackweek_2020_machine_learning]
+
+---
+
+# Other Resources
+
+.center[
+![:scale 25%](images/PDSH.png)&nbsp;&nbsp;&nbsp;
+![:scale 25%](images/imlp.png)&nbsp;&nbsp;&nbsp;
+![:scale 25%](images/esl.png)
+]
+Lecture: http://www.cs.columbia.edu/~amueller/comsw4995s19/schedule/
+
+https://www.youtube.com/andreasmueller
+
+Videos and more slides!
+
+???
+
+FIXME JAKE book border
+There are three books that I recommend looking into for this course. Definitely
+check out my book, Introduction to machine learning with Python. You can find
+the PDF on courseworks. My book should be a relatively easy read and it’s quite
+short. The second one is Applied predictive modelling by Max Kuhn, which goes a
+bit deeper. This is about the level I want to go to in this course. You can get
+it for free at springer link, I posted a link in courseworks. These two are
+really the essential ones. Finally, there's Elements of statistical learning,
+also known as ESL or the stanford book, by Hastie Tibshibani and Friedman is a
+classic for a more theoretical view. You can get it for free on the authors
+website.
+
+If you want to brush up on your Python skills, I also recommend the Python Data
+Science Handbook by my friend Jake Vanderplas.
+
+---
+
+class: spacious
+# Types of Machine Learning
+- Supervised
+- Unsupervised
+- Reinforcement
+
+???
+
+They called supervised learning, unsupervised learning and reinforcement learning.
+What are they?
+This course will heavily focus on supervised learning, but you should be aware
+the other types and their characteristics. We will do some unsupervised learning,
+but no reinforcement learning. Supervised learning is the most commonly used type in
+industry and research right now, though reinforcement learning becomes
+increasingly important.
+
+---
+
+class: center
+
+# Supervised Learning
+
+.larger[
+$$ (x_i, y_i) \propto p(x, y) \text{ i.i.d.}$$
+$$ x_i \in \mathbb{R}^p$$
+$$ y_i \in \mathbb{R}$$
+$$f(x_i) \approx y_i$$
+]
+
+???
+
+In supervised learning, the dataset we learn form is input-output pairs (x_i,
+y_i), where x_i is some n_dimensional input, or feature vector, and y_i is the
+desired output we want to learn.  Generally, we assume these samples are drawn
+from some unknown joint distribution p(x, y). In statistics, x_i might be
+called independent variables and y_i dependent variable.
+What does iid mean?
+We say they are drawn iid, which stands for independent identically
+distributed. In other words, the x_i, y_i pairs are independent and all come
+from the same distribution p. You can think of this as there being some
+process that goes from x_i to y_i, but that we don’t know. We write this as a
+probability distribution and not as a function since even if there is a real
+process creating y from x, this process might not be deterministic.  The goal
+is to learn a function f so that for new inputs x for which we don’t observe y,
+f(x) is close to y.  This approach is very similar to function approximation.
+The name supervised comes from the fact that during learning, a supervisor
+gives you the correct answers y_i.
+
+---
+
+# Generalization
+.padding-top[
+.left-column[
+Not only
+
+
+also for new data:
+]
+
+.right-column[$f(x_i) \approx y_i$,
+
+
+$f(x) \approx y$
+]]
+???
+For both regression and classification, it’s important to keep in mind the
+concept of generalization.
+Let’s say we have a regression task. We have features, that is data vectors x_i
+and targets y_i drawn from a joint distribution. We now want to learn a
+function f, such that f(x) is approximately y, not on this training data, but
+on new data drawn from this distribution. This is what’s called generalization,
+and this is a core distinction to function approximation. In principle we don’t
+care about how well we do on x_i, we only care how well we do on new samples
+from the distribution. We’ll go into much more detail about generalization in
+about a week, when we dive into supervised learning.
+
+---
+class: spacious
+# Examples of Supervised Learning
+- spam detection
+- medical diagnosis
+- ad click prediction
+
+???
+
+Here are some examples of supervised learning.
+Given an array of test results from a patient, does this patient have diabetes?
+The x_i would be the different test results, and y_i would be diabetes or no
+diabetes.  Given a piece of a satellite image, what is the terrain in this
+image? Here x_i would be the pixels of the image, and y_i would be the terrain
+types.
+
+This is often used to automate manual labor. For example, you might annotate
+part of a dataset manually, then learn a machine learning model from this
+annotations, and use the model to annotate the rest of your data.
+---
+class: center
+# Correlations in time (and/or space)
+
+![:scale 70%](images/time_series1.png)
+
+???
+Not necessarily obvious that there is a time component!
+Data collection usually happens over time!
+
+---
+class: center
+# Correlations in time (and/or space)
+
+![:scale 70%](images/time_series2.png)
+
+???
+Not necessarily obvious that there is a time component!
+Data collection usually happens over time!
+
+---
+class: center
+# Correlations in time (and/or space)
+
+![:scale 70%](images/time_series3.png)
+
+???
+Not necessarily obvious that there is a time component!
+Data collection usually happens over time!
+
+---
+
+# Relationship to Statistics
+
+.left-column[
+Statistics
+- traditionally emphasis on inference
+- Often model-driven
+]
+.right-column[
+Machine learning
+- traditionally emphasis on prediction
+- usually data driven
+]
+
+.clear-column[
+.padding-top[
+This workshop will solely focus on prediction.
+
+.smallest[Check out the classic [Statistical Modeling: The two cultures](https://projecteuclid.org/euclid.ss/1009213726)]
+]]
+???
+
+Before I’ll go into some general principles, I want to position machine
+learning in relation to statistics. I recently got chewed out by a colleague
+for doing that. My goal here is not to say one is better than the other.
+Actually, there’s really no clear boundary between statistics and machine learning, and
+anyone that tells you otherwise is lying. Two of the books I recommended for the
+course are actually statistics text books. But I can tell you how the tools
+that I’m talking about in this course will differ from what you’d learn in a
+typical stats course.
+
+Statistics is usually about inference, often phrased in terms of hypothesis
+testing. An example might be a yes-no-question, such as “are women less likely
+to enroll in a Data Science Program”, and you have a sample population, for
+example this classroom, and you can then try to make an inference about whether
+this statement is true. Often this includes making assumptions on how your
+sample relates to the general population, say this class vs all of DSI or
+Columbia vs all of the US. You might also have a specific model of how the process
+behind your question works.
+
+---
+
+# Relationship to Statistics
+
+.left-column[
+Statistics
+- traditionally emphasis on inference
+- Often model-driven
+]
+.right-column[
+Machine learning
+- traditionally emphasis on prediction
+- usually data driven
+]
+
+
+.clear-column[
+.padding-top[
+This workshop will solely focus on prediction.
+
+.smallest[Check out the classic [Statistical Modeling: The two cultures](https://projecteuclid.org/euclid.ss/1009213726)]
+]]
+???
+
+On the other hand, machine learning is about prediction and generalization. We
+want to learn from past data to predict outcomes on future, unseen data.
+
+We usually want to make statements about individual data points, and we want to
+build a model that will work on new data that fulfills our assumptions,
+independent of the population we samples. Often we don’t have or need a model
+of the process, but we rely on the assumption that our training data is
+generated from the same process as any future data will be.
+
+There are statisticians that do predictions and there are machine learning
+scientists that do inference, but I find this distinction helpful.
+
+Again I’m not saying one or the other is better, I’m just saying that you should
+know what kind of problem you are trying to solve, and what the right tool for
+the problem is. And then you can call it machine learning or statistics or
+probabilistic inference or data science. The tools you learn in this
+class will usually not help you to make yes/no inferences, and they
+will only give you a limited insight into the data generating process.
+---
+class: center
+
+# Representing Data
+
+![:scale 100%](images/matrix-representation.png)
+---
+class: center
+
+# Training and Test Data
+
+![:scale 80%](images/train-test-split.png)
+---
+
+class: center
+# Supervised ML Workflow
+
+![:scale 80%](images/supervised-ml-workflow.png)
+---
+class: center
+
+# Supervised ML Workflow
+
+![:scale 100%](images/supervised-ml-api.png)
+
+
+    </textarea>
+    <script src="remark-latest.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+    <script>
+    // Config Remark
+    remark.macros['scale'] = function (percentage) {
+        var url = this;
+        return '<img src="' + url + '" style="width: ' + percentage + '" />';
+    };
+    config_remark = {
+        highlightStyle: 'github',
+        highlightSpans: true,
+        highlightLines: true,
+        ratio: "16:9"
+    };
+      var slideshow = remark.create(config_remark);
+    // Configure MathJax
+    MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] /* removed 'code' entry*/
+    }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i = 0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+    </script>
+  </body>
+</html>
